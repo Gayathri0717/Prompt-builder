@@ -28,7 +28,7 @@ User input: "${prompt}"
 
   try {
     // 🔸 Call Ollama API
-    const response = await axios.post("https://containing-acknowledged-perspective-canvas.trycloudflare.com/api/generate", {
+    const response = await axios.post(" https://street-configured-tutorial-instrumentation.trycloudflare.com/api/generate", {
       model: "mistral",
       prompt: refinerPrompt,
       stream: false,
