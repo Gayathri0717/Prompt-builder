@@ -3,7 +3,7 @@ const express = require("express");
 const axios = require("axios");
 
 const router = express.Router();
-
+const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
 router.post("/", async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) return res.status(400).json({ error: "Prompt required" });
@@ -28,7 +28,7 @@ User input: "${prompt}"
 
   try {
     // 🔸 Call Ollama API
-    const response = await axios.post(" https://epic-extent-remains-hewlett.trycloudflare.com/api/generate", {
+      const response = await axios.post(`${OLLAMA_URL}/api/generate`, {
       model: "mistral",
       prompt: refinerPrompt,
       stream: false,
