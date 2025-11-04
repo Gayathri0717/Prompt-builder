@@ -10,6 +10,9 @@ const cors = require('cors');
 dotenv.config();
 connectDB();
 
+console.log("🟢 OLLAMA_URL =", process.env.OLLAMA_URL);
+
+
 const app = express();
 app.use(express.json());
 app.use(cors());

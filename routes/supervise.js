@@ -3,20 +3,19 @@ const express = require("express");
 const axios = require("axios");
 
 const router = express.Router();
-const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
+const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434' ;
 router.post("/", async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) return res.status(400).json({ error: "Prompt required" });
 
-  // 🔹 Instruction for Ollama — force JSON-only output
+
   const refinerPrompt = `
 You are a professional prompt refiner.
-Analyze the user's input prompt and improve grammar, clarity, or completeness without changing meaning.
-If already perfect, return as-is.
+Your task: analyze the user’s input prompt.
+If it contains grammar mistakes, unclear phrasing, or missing details, rewrite it into a clean, professional, and AI-understandable version without changing the meaning.
+If it's already clear, return it as is.
 
-Respond **strictly and only** in JSON. Do not include explanations, comments, or markdown.
-
-Format:
+Respond strictly in JSON format:
 {
   "status": "refined" | "perfect",
   "refinedPrompt": "string",
@@ -28,6 +27,8 @@ User input: "${prompt}"
 
   try {
     // 🔸 Call Ollama API
+    console.log("🟢 OLLAMA_URL =", OLLAMA_URL);
+
       const response = await axios.post(`${OLLAMA_URL}/api/generate`, {
       model: "mistral",
       prompt: refinerPrompt,
@@ -38,6 +39,7 @@ User input: "${prompt}"
     const output =
       response.data.response || response.data.output || response.data || "";
 
+console.log("🟡 Raw Ollama Output:\n", output)
     // 🧩 Attempt to extract JSON from model output
     const jsonMatch = output.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
@@ -79,3 +81,4 @@ User input: "${prompt}"
 });
 
 module.exports = router;
+
